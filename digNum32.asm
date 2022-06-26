@@ -21,12 +21,20 @@
     digitacao:  
         mov ah,1 ; selecionei acao de obter digitacao de um char, sem ENTER
         int 21h  ; executa a acao selecionada acima
-        mov entrada[bx], al ; no al está o char digitado; o coloco em entrada na posicao bx
+        cmp al, 8
+        je backspace
+        mov byte ptr entrada[bx], al ; no al está o char digitado; o coloco em entrada na posicao bx
         inc bx ; incremento bx (aumento 1)
-
         cmp al, 13 ; comparo o char digitado com 13, que é ENTER
         jne digitacao ; salto para digitacao se for diferente
-
+        jmp tratarDig
+        backspace:
+        dec bx
+        mov byte ptr entrada[bx], 0 ; no al está o char digitado; o coloco em entrada na posicao bx
+        cmp al, 13 ; comparo o char digitado com 13, que é ENTER
+        jne digitacao ; salto para digitacao se for diferente
+    
+    tratarDig:
     dec bx
     mov entrada[bx], '$' 
     mov ax, 0
