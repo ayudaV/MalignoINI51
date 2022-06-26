@@ -2,6 +2,8 @@
 .STACK 100h
 .DATA
     frase       DB   'Digite um numero: $'
+    erro        DB   'So existem fatoriais de numeros postivos!$'
+    erro2       DB   'Nao suportamos fatoriais maiores que 12!$'
     entrada     DB   12 DUP('$')
     saida       DB   12 dup('$')
     num_low     DW   ?
@@ -29,60 +31,65 @@
 
     dec bx
     mov entrada[bx], '$' 
+
     mov ax, 0
     mov bx, 0
     mov cx, 10
     mov dx, 0
-    cmp byte ptr entrada[bx], '-'
-    je negative
     mov di, 0
-    jmp guardar
-    negative:
-        mov di, 1
+    cmp byte ptr entrada[bx], '-'
+    jne guardar
+    mov dx, offset erro
+    mov ah,9 ; selecionei a acao de printar texto terminado com $
+    int 21h  ; executa a acao selecionada acima
+    mov  ax, 4c00h
+    int  21h
 
     guardar:
-        push ax
-        mov ax, dx
         mul cx
-        mov dx, ax
-        pop ax
-        mov bx, dx
-        mul cx
-        add dx, bx
-
         mov bx, 0
         mov bl, byte ptr entrada[di]
         sub bl, 48
         add ax, bx
-
-        jnc soma
-        inc dx
-        soma:
-
         inc di
         cmp byte ptr entrada[di], '$'
         jne guardar
 
-    mov bx, 0
-    cmp entrada[bx], '-'
-    jne printar
-    neg ax
-    xor dx, 0FFFFh
+    cmp ax, 12
+    jle fatorial
+    mov dx, offset erro2
+    mov ah,9 ; selecionei a acao de printar texto terminado com $
+    int 21h  ; executa a acao selecionada acima
+    mov  ax, 4c00h
+    int  21h
+
+    fatorial:
+        mov bx, 0
+        mov dx, 0
+        mov cx, ax
+        cmp cx, 2
+        jnl fatorar
+        mov cx, 2
+        mov ax, 1
+        fatorar:
+            dec cx
+            mov bx, ax
+            mov ax, dx
+            mul cx
+            mov dx, ax
+            mov ax, bx
+            mov bx, dx
+            mul cx
+            add dx, bx
+            cmp cx, 1
+            jg fatorar
+
 
     printar:
         mov  num_low, ax
         mov  num_hig, dx
         mov  bx, 10
         mov  cx, 0
-        cmp dh, 80h
-        js extrair
-        dec ax
-        xor ax, 0FFFFh
-        xor dx, 0FFFFh
-        mov byte ptr [si], '-'
-        inc si
-        mov  num_low, ax
-        mov  num_hig, dx
 
     extrair: 
         mov  dx, 0
