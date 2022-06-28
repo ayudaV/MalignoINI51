@@ -13,7 +13,7 @@
     mov ax,@data
     mov ds,ax
     mov dx, offset frase ; move pra dx o endereço de frase
-    mov ah,9 ; selecionei a acao de printar texto terminado com $
+    mov ah,9 ; selecione a acao de printar texto terminado com $
     int 21h  ; executa a acao selecionada acima
 
     digitacao:  
@@ -70,7 +70,7 @@
     int  21h
 
     fatorial:
-        mov bx, 0 ; zera as variaveis
+        mov bx, 0 ; zera as registradores
         mov dx, 0
         mov cx, ax ; move pra cx, o valor de ax
         cmp cx, 2 ; verifica se cx é menor que 2
@@ -81,12 +81,12 @@
         ; fatorial de 1 e 0: ax: 1 cx: 2 
         fatorar:
             dec cx ; subtrai 1 de cx
-            mov bx, ax ; move ax para uma variavel auxiliar
+            mov bx, ax ; move ax para uma registrador auxiliar
             mov ax, dx ; coloca dx em ax
             mul cx ; multiplica ax por cx
             mov dx, ax ; move ax de volta para dx
             mov ax, bx ; volta o valor de ax
-            mov bx, dx ; move dx para uma variavel auxiliar
+            mov bx, dx ; move dx para uma registrador auxiliar
             mul cx ; multiplica ax por cx, o valor que passar irá para dx
             add dx, bx ; adiciona a dx, o valor de bx, o valor que passou + o valor antigo
             cmp cx, 1 ; verifica se cx é mair que 1

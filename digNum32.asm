@@ -49,12 +49,12 @@
         mov di, 1 ; os numeros serão lidos a partir do char 1 pois char 0 é -
 
     guardar:
-        mov bx, ax ; move ax para uma variavel auxiliar
+        mov bx, ax ; move ax para uma registrador auxiliar
         mov ax, dx ; move dx para ax
         mul cx ; multiplica ax por 10
         mov dx, ax ; move ax de volta para dx
         mov ax, bx ; volta o valor para ax
-        mov bx, dx ; move dx para uma variavel auxiliar
+        mov bx, dx ; move dx para uma registrador auxiliar
         mul cx ; multiplica ax por 10, o valor pode extrapolar para dx
         add dx, bx ; adiciona em dx o valor preservado em bx
 
